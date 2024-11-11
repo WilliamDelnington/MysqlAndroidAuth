@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     Button loginSubmit;
     TextView signupRoute;
     ProgressBar progressBar;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         loginSubmit = findViewById(R.id.loginSubmit);
         signupRoute = findViewById(R.id.signupRoute);
         progressBar = findViewById(R.id.progressBar);
+
+        sharedPreferences = this.getPreferences(MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         signupRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     progressBar.setVisibility(View.GONE);
+                                    editor.putBoolean("isLoggedin", true);
                                     String result = putData.getResult();
                                     if (result.equals("Login Success")) {
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
